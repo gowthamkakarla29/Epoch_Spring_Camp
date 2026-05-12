@@ -1,0 +1,77 @@
+                         ┌─────────────────────┐
+                         │   RAVDESS Dataset   │
+                         │   Audio .wav Files  │
+                         └──────────┬──────────┘
+                                    │
+                    ┌───────────────┴────────────────┐
+                    │                                │
+                    │                                │
+          AUDIO                                     TEXT 
+                    │                                │
+                    │                                │
+     ┌──────────────▼──────────────┐     ┌──────────▼───────────┐
+     │      Load Audio             │     │   Whisper Speech     │
+     │      using Librosa          │     │   To Text            │
+     └──────────────┬──────────────┘     └──────────┬───────────┘
+                    │                                │
+                    │                                │
+     ┌──────────────▼──────────────┐     ┌──────────▼───────────┐
+     │ Generate Mel Spectrograms   │     │   Tokenization       │
+     │      (128 × 128)            │     │   + Padding          │
+     └──────────────┬──────────────┘     └──────────┬───────────┘
+                    │                                │
+                    │                                │
+     ┌──────────────▼──────────────┐     ┌──────────▼───────────┐
+     │        CNN Network          │     │      Embedding       │
+     │ Conv → ReLU → Pooling       │     │      Layer           │
+     │ Conv → ReLU → Pooling       │     └──────────┬───────────┘
+     │ Conv → ReLU → Pooling       │                │
+     └──────────────┬──────────────┘                │
+                    │                               │
+                    │                     ┌─────────▼───────────┐
+                    │                     │      LSTM Layer     │
+                    │                     │ Sequential Learning │
+                    │                     └─────────┬───────────┘
+                    │                               │
+                    │                               │
+     ┌──────────────▼──────────────┐     ┌──────────▼───────────┐
+     │   Audio Feature Vector      │     │   Text Feature       │
+     │      Dense(128)             │     │   Vector Dense(64)   │
+     └──────────────┬──────────────┘     └──────────┬───────────┘
+                    │                                │
+                    └──────────────┬─────────────────┘
+                                   │
+                    ┌──────────────▼──────────────┐
+                    │     Feature Concatenation   │
+                    │       (Early Fusion)        │
+                    └──────────────┬──────────────┘
+                                   │
+                                   │
+                    ┌──────────────▼──────────────┐
+                    │      Fusion Dense Layers    │
+                    │    Dense → Dropout → Dense  │
+                    └──────────────┬──────────────┘
+                                   │
+                                   │
+                    ┌──────────────▼──────────────┐
+                    │     Softmax Classification  │
+                    │        8 Emotions           │
+                    └─────────────────────────────┘
+
+used chat GPT to generate the above diagram based on  the ideas and the understanding i have 
+
+              precision    recall  f1-score   support
+
+       angry       0.53      0.73      0.62        11
+        calm       0.56      0.64      0.60        14
+     disgust       0.43      0.38      0.40         8
+     fearful       0.36      0.36      0.36        11
+       happy       0.57      0.31      0.40        13
+     neutral       0.00      0.00      0.00         3
+         sad       0.43      0.43      0.43        14
+   surprised       0.62      0.50      0.56        10
+
+    accuracy                           0.46        84
+   macro avg       0.44      0.42      0.42        84
+weighted avg       0.49      0.46      0.47        84
+
